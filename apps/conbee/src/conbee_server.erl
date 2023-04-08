@@ -61,7 +61,7 @@ init([]) ->
     lib_db:dynamic_db_init([]),
     {ok,HostName}=inet:gethostname(),
     [HostSpec]=[HostSpec||HostSpec<-db_host_spec:get_all_id(),
-			  HostName==db_host_spec:read(hostname,HostSpec)],
+			  {ok,HostName}==db_host_spec:read(hostname,HostSpec)],
     {ok,ApplConfig}=db_host_spec:read(application_config,HostSpec),
     [{conbee,[{conbee_addr,ConbeeAddr},
               {conbee_port,ConbeePort},
@@ -89,14 +89,10 @@ init([]) ->
 %%          {stop, Reason, State}            (terminate/2 is called)
 %% --------------------------------------------------------------------
 handle_call({set,DeviceName,DeviceState},_From, State) ->
-
-    sd:cast(nodelog,nodelog,log,[notice,?MODULE_STRING,?LINE,[" set request",
-							      device_name,DeviceName,
-							      device_state,DeviceState]]),
     ConbeeAddr=State#state.ip_addr,
     ConbeePort=State#state.ip_port,
     Crypto=State#state.crypto,
-    Reply=rpc:call(node(),lib_hw_conbee,set,[DeviceName,DeviceState,
+    Reply=rpc:call(node(),lib_conbee,set,[DeviceName,DeviceState,
 					     ConbeeAddr,ConbeePort,Crypto],2*5000),
     {reply, Reply, State};
 
@@ -104,7 +100,7 @@ handle_call({get,DeviceName},_From, State) ->
     ConbeeAddr=State#state.ip_addr,
     ConbeePort=State#state.ip_port,
     Crypto=State#state.crypto,
-    Reply=rpc:call(node(),lib_hw_conbee,get,[DeviceName,ConbeeAddr,ConbeePort,Crypto],2*5000),
+    Reply=rpc:call(node(),lib_conbee,get,[DeviceName,ConbeeAddr,ConbeePort,Crypto],2*5000),
     {reply, Reply, State};
 
 
@@ -112,14 +108,14 @@ handle_call({get_all_device_info,DeviceType},_From, State) ->
     ConbeeAddr=State#state.ip_addr,
     ConbeePort=State#state.ip_port,
     Crypto=State#state.crypto,
-    Reply=rpc:call(node(),lib_hw_conbee,all_info,[DeviceType,ConbeeAddr,ConbeePort,Crypto],2*5000),
+    Reply=rpc:call(node(),lib_conbee,all_info,[DeviceType,ConbeeAddr,ConbeePort,Crypto],2*5000),
     {reply, Reply, State};
 
 handle_call({device_info,WantedDeviceName},_From, State) ->
     ConbeeAddr=State#state.ip_addr,
     ConbeePort=State#state.ip_port,
     Crypto=State#state.crypto,
-    Reply=rpc:call(node(),lib_hw_conbee,device_info,[WantedDeviceName,ConbeeAddr,ConbeePort,Crypto],2*5000),
+    Reply=rpc:call(node(),lib_conbee,device_info,[WantedDeviceName,ConbeeAddr,ConbeePort,Crypto],2*5000),
     {reply, Reply, State};
 
 handle_call({get_state},_From, State) ->

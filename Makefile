@@ -32,8 +32,8 @@ prod:
 	rm -rf Mnesia.* logs;
 	rebar3 as prod release;
 	rebar3 as prod tar;
-	rm /home/joq62/erlang/infra/api_repo/conbee.api;
-	cp api/*.api /home/joq62/erlang/infra/api_repo;
+	rm -rf /home/joq62/erlang/infra/api_repo/conbee.api;
+	cp  apps/conbee/src/*.api /home/joq62/erlang/infra/api_repo;
 	mv _build/prod/rel/conbee/*.tar.gz ../release 
 
 eunit:
