@@ -1,0 +1,37 @@
+%%  This file expects that log.api is included -include("sender.hrl").
+%%%% Provider Api -----------------------------------------------------------------------------
+
+%% conbee:set(DeviceName,DeviceState)
+-define(Conbee_Set(DeviceName,DeviceState,Node,RpcTimeout),
+	rpc:call(Node,conbee,set,[DeviceName,DeviceState,?Sender],RpcTimeout)).
+
+%% conbee:get(DeviceName)
+-define(Conbee_Get(DeviceName,Node,RpcTimeout),
+	rpc:call(Node,conbee,get,[DeviceName,?Sender],RpcTimeout)).
+
+%% conbee:get_all_devices_info(DeviceType)
+-define(Conbee_Get_All_Devices_Info(DeviceType,Node,RpcTimeout),
+	rpc:call(Node,conbee,get_all_devices_info,[DeviceType,?Sender],RpcTimeout)).
+
+%% conbee:device_info(DeviceName)
+-define(Conbee_Device_Info(DeviceName,Node,RpcTimeout),
+	rpc:call(Node,conbee,device_info,[DeviceName,?Sender],RpcTimeout)).
+
+%% Gen server Api ------------------------------------------------------------------------------
+
+%% conbee:start()
+-define(Conbee_Start(Node,RpcTimeout),
+	rpc:call(Node,conbee,start,[?Sender],RpcTimeout)).
+
+%% conbee:stop()
+-define(Conbee_Stop(Node,RpcTimeout),
+	rpc:call(Node,conbee,stop,[?Sender],RpcTimeout)).
+
+
+%% conbee:ping()
+-define(Conbee_Ping(Node,RpcTimeout),
+	rpc:call(Node,conbee,ping,[?Sender],RpcTimeout)).
+
+%% conbee:get_state()
+-define(Conbee_Get_State(Node,RpcTimeout),
+	rpc:call(Node,conbee,get_state,[?Sender],RpcTimeout)).

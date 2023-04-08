@@ -25,12 +25,6 @@
 ]).
 
 
--export([
-	 start/0,
-	 stop/0
-	]).
-
-
 %% gen_server callbacks
 
 
@@ -49,14 +43,6 @@
 %% External functions
 %% ====================================================================
 
-	    
-%% call
-start()-> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
-stop()-> gen_server:call(?MODULE, {stop},infinity).
-
-
-
-%% cast
 
 %% ====================================================================
 %% Server functions
